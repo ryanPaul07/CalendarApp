@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Calendar Viewer</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Calendar Visualizer">
+    <meta name="keywords" content="VCalendar">
+    <meta name="author" content="Ryan Paul">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Load jquery, bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <!-- Custom CSS End -->
+</head>
+<body>
+  <div class="container">
+
+
+
+    <h2><center><font face="helvetica">CALENDAR VIEWER</font></center></h2>
+
+    <hr>
+
+    <!-- Status Panel  -->
+    <h3><font face="georgian">Status Panel</font></h3>
+
+    <!-- Status Table -->
+    <div id="div-Status" style="height:400px;overflow:auto;" class ="table-responsive">
+      <table class="table table-hover" id="Status-Table">
+        <tbody id="Status-T-Body">
+          <tr>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Clear Button the clear the Status Panel Table -->
+    <button id="clearButton" type="button" class="btn btn-outline-secondary">Clear</button>
+
+    <hr>
+
+    <!-- File Log Panel  -->
+    <h3><font face="georgian">File Log Panel</font></h3>
+
+    <!-- File Log Table -->
+    <div style="height:500px;overflow:auto;" class ="table-responsive">
+      <table class="table table-hover" id="File-Log-Table">
+        <thead>
+          <tr>
+            <th scope="col">File name</th>
+            <th scope="col">Version</th>
+            <th scope="col">Product ID</th>
+            <th scope="col">Number of events</th>
+            <th scope="col">Number of properties</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Buttons to browse and upload files -->
+    <form id = "uploadF" enctype="multipart/form-data" method="post" action="/upload">
+      <input id="file" type="submit" value="Upload"  class="btn btn-outline-secondary dropdown-toggle">
+      <input name="uploadFile" type="file" accept=".ics">
+    </form>
+
+    <hr>
+
+    <!-- Calendar view Panle -->
+    <h3><font face="georgian">Calendar View Panel</font></h3>
+
+    <!-- Dropdown to display all the valid files -->
+    <div class="dropdown">
+      <a class="btn btn-outline-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Files
+      </a>
+      <div id="firstDropDownId" class="dropdown-menu dropDownButton" aria-labelledby="dropdownMenuButton" style="height:200px;overflow:auto;">
+      </div>
+    </div>
+
+    <br>
+
+    <!-- Calendar View Table -->
+    <div style="height:500px;overflow:auto;" class ="table-responsive">
+      <table class="table table-hover" id="Calendar-View-Table">
+        <thead>
+          <tr>
+            <th scope="col">Event No</th>
+            <th scope="col">Start date</th>
+            <th scope="col">Start time</th>
+            <th scope="col">Summary</th>
+            <th scope="col">Props</th>
+            <th scope="col">Alarms</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr>
+
+    <!-- Create Calendar Panel -->
+    <h3><font face="georgian">Create Calendar</font></h3>
+
+    <!-- Form to prompt for user input -->
+    <form>
+      <div class="form-group">
+        <label for="fileName">File Name</label>
+        <input type="text" class="form-control" id="fileName" placeholder="File Name" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputEmail4">Version</label>
+          <input type="number" class="form-control" id="Version" placeholder="Version" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputPassword4">ProdID</label>
+          <input type="text" class="form-control" id="ProdiD" placeholder="ProdiD" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputEmail4">Start Date</label>
+          <input type="date" class="form-control" id="dtStartDate" placeholder="DT Start Date" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputPassword4">Start Time</label>
+          <input type="time" class="form-control" id="dtStartTime" placeholder="DT Start Time" required>
+        </div>
+        <div class="form-group col-md-5">
+          <button id="utcStart" type="button" class="btn btn-outline-primary" data-toggle="button" aria-pressed="false" autocomplete="off">UTC</button>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputEmail4">Creation Date</label>
+          <input type="date" class="form-control" id="dtStampDate" placeholder="DT Stamp Date" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputPassword4">Creation Time</label>
+          <input type="time" class="form-control" id="dtStampTime" placeholder="DT Stamp Time" required>
+        </div>
+        <div class="form-group col-md-5">
+          <button id="utcCreation" type="button" class="btn btn-outline-primary" data-toggle="button" aria-pressed="false" autocomplete="off">UTC</button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="inputAddress2">UID</label>
+        <input type="text" class="form-control" id="UID" placeholder="UID" required>
+      </div>
+      <button id="calendarButton" type="submit" class="btn btn-primary">Create Calendar</button>
+    </form>
+
+    <hr>
+
+    <!-- Add Event Panel -->
+    <h3><font face="georgian">Add Event</font></h3>
+
+    <!-- Second dropdown to display all the valid files -->
+    <div class="dropdown">
+      <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Files
+      </button>
+      <div id="secondDropDown" class="dropdown-menu dropDownButton" aria-labelledby="dropdownMenuButton" style="height:200px;overflow:auto;">
+      </div>
+    </div>
+    <hr>
+
+    <!-- Form to prompt for user input -->
+    <form>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputEmail4">Start Date</label>
+          <input type="date" class="form-control" id="dtStartDateEvent" placeholder="DT Start Date" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputPassword4">Start Time</label>
+          <input type="time" class="form-control" id="dtStartTimeEvent" placeholder="DT Start Time" required>
+        </div>
+        <div class="form-group col-md-5">
+          <button id="utcStartEvent" type="button" class="btn btn-outline-primary" data-toggle="button" aria-pressed="false" autocomplete="off">UTC</button>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputEmail4">Creation Date</label>
+          <input type="date" class="form-control" id="dtStampDateEvent" placeholder="DT Start Date" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputPassword4">Creation Time</label>
+          <input type="time" class="form-control" id="dtStampTimeEvent" placeholder="DT Stamp Time" required>
+        </div>
+        <div class="form-group col-md-5">
+          <button id="utcStampEvent" type="button" class="btn btn-outline-primary" data-toggle="button" aria-pressed="false" autocomplete="off">UTC</button>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputEmail4"> UID</label>
+          <input type="text" class="form-control" id="uid" placeholder="UID" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputPassword4">Summary</label>
+          <input type="text" class="form-control" id="Summary" placeholder="Summary">
+        </div>
+      </div>
+      <button id="submitEvent" type="button" class="btn btn-primary">Add Event</button>
+    </form>
+
+    <hr>
+
+    <!-- Assignment 4 -->
+    <h3><font face="georgian">Assignment 4 Functionality</font></h3>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#LoginModal">
+      Login
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="LoginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="exampleModalScrollableTitle"><font face="georgian">Sign In</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="Username">Username</label>
+                <input type="text" class="form-control" id="Username" aria-describedby="emailHelp" placeholder="Username" required>
+              </div>
+              <div class="form-group">
+                <label for="Password">Password</label>
+                <input type="password" class="form-control" id="Password" placeholder="Password" required>
+              </div>
+              <div class="form-group">
+                <label for="DbName">Database Name</label>
+                <input type="text" class="form-control" id="DbName" placeholder="Database Name" required>
+              </div>
+              <button id="LoginButton" type="button" class="btn btn-outline-secondary" data-dismiss="modal">Login</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr>
+    <div class="form-group">
+      <button id="clearData" type="button" class="btn btn-outline-secondary" data-dismiss="modal">Clear All Data</button>
+      <button id="displayDB" type="button" class="btn btn-outline-secondary" data-dismiss="modal">Display DB Status</button>
+      <button id="storeF" type="button" class="btn btn-outline-secondary" data-dismiss="modal">Store All Files</button>
+      <hr>
+      <button id="eventsSD" type="button" class="btn btn-outline-secondary" data-dismiss="modal"> Events by start date</button>
+      <button id="eventWC" type="button" class="btn btn-outline-secondary" data-dismiss="modal"> Events which conflict</button>
+      <hr>
+      <!-- <button id="eventSF" type="button" class="btn btn-outline-secondary" data-dismiss="modal"> Events by specific file</button> -->
+
+      <form class="form-inline">
+        <div class="form-group mx-sm-3 mb-2">
+          <label for="inputPassword2" class="sr-only">Events by specific file</label>
+          <input type="text" class="form-control" id="databaseFile" placeholder="Specific File">
+        </div>
+        <button id="eventSF" type="button" class="btn btn-primary mb-2">Events by specific file</button>
+      </form>
+
+      <!-- <div class="btn-group">
+        <button id="executeQ" type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Execute Query
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </div> -->
+    </div>
+
+    <hr>
+    <h3><font face="georgian">Console Panel</font></h3>
+    <hr>
+    <!-- Console Panel -->
+    <div id="div-Console" style="height:400px;overflow:auto;" class ="table-responsive">
+      <table class="table table-hover" id="Console-Table">
+        <tbody id="Console-T-Body">
+          <tr>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <hr>
+
+    <button id="clearButtonConsole" type="button" class="btn btn-outline-secondary">Clear</button>
+
+    <hr>
+
+    <!-- <button id="executeQ" type="button" class="btn btn-outline-secondary" data-dismiss="modal">Execute Query</button>
+    <button id="executeQ" type="button" class="btn btn-outline-secondary" data-dismiss="modal">Execute Query</button>
+    <button id="executeQ" type="button" class="btn btn-outline-secondary" data-dismiss="modal">Execute Query</button> -->
+
+    <!-- Leave me at the bottom of body -->
+    <script src="/index.js"></script>
+  </div>
+</body>
+</html>
